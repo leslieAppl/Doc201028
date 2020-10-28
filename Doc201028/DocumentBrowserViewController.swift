@@ -29,17 +29,37 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
     
     
     // MARK: UIDocumentBrowserViewControllerDelegate
-    
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didRequestDocumentCreationWithHandler importHandler: @escaping (URL?, UIDocumentBrowserViewController.ImportMode) -> Void) {
-        let newDocumentURL: URL? = nil
         
-        // Set the URL for the new document here. Optionally, you can present a template chooser before calling the importHandler.
-        // Make sure the importHandler is always called, even if the user cancels the creation request.
-        if newDocumentURL != nil {
-            importHandler(newDocumentURL, .move)
-        } else {
+        // Letting Users Choose a Template
+        let title = NSLocalizedString("Choose File Template", comment: "")
+        let message = "Please choose a file."
+        let cancelButtonTitle = NSLocalizedString("Cancel", comment: "")
+        let defaultButtonTitle = NSLocalizedString("Basic (Default) ", comment: "Default")
+        let generalButtonTitle = NSLocalizedString("(Demo)", comment: "")
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let newDocumentURL = Bundle.main.url(forResource: "Template", withExtension: nil)
+        importHandler(newDocumentURL, .copy)
+        
+        // Create the actions.
+        let cancelAction = UIAlertAction(title: cancelButtonTitle, style: .cancel) { (action) in
             importHandler(nil, .none)
         }
+        let defaultButtonAction = UIAlertAction(title: defaultButtonTitle, style: .default) { (_) in
+            let newDocumentURL = Bundle.main.url(forResource: "Template", withExtension: nil)
+            importHandler(newDocumentURL, .copy)
+        }
+        
+        let generalButtonAction = UIAlertAction(title: generalButtonTitle, style: .default) { (_) in
+            let newDocumentURL = Bundle.main.url(forResource: "Template", withExtension: nil)
+            importHandler(newDocumentURL, .copy)
+        }
+        
+        // Add the actions.
+        alertController.addAction(cancelAction)
+        alertController.addAction(defaultButtonAction)
+        alertController.addAction(generalButtonAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     func documentBrowser(_ controller: UIDocumentBrowserViewController, didPickDocumentsAt documentURLs: [URL]) {
