@@ -38,8 +38,6 @@ class DocumentBrowserViewController: UIDocumentBrowserViewController, UIDocument
         let defaultButtonTitle = NSLocalizedString("Basic (Default) ", comment: "Default")
         let generalButtonTitle = NSLocalizedString("(Demo)", comment: "")
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let newDocumentURL = Bundle.main.url(forResource: "Template", withExtension: nil)
-        importHandler(newDocumentURL, .copy)
         
         // Create the actions.
         let cancelAction = UIAlertAction(title: cancelButtonTitle, style: .cancel) { (action) in
